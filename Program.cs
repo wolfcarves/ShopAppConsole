@@ -12,7 +12,7 @@ class Program
         using (var context = new AppDbContext())
         {
             var modulePrompter = new ModulePrompter();
-            var mainOperation = new MainOperation();
+            var mainOperation = new MainOperation(context);
 
             var program = new Program(modulePrompter, mainOperation);
             program.Run();
@@ -39,7 +39,7 @@ class Program
         };
 
         if (operations.TryGetValue(selectedModule, out var operation))
-            operation(selectedModule);
+            operation(selectedOperation);
         else
             throw new Exception("Module selected is not valid");
     }

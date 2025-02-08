@@ -14,7 +14,6 @@ public class BasePrompter
             Console.WriteLine(title);
             Console.WriteLine("");
 
-
             for (int i = 0; i < list.Length; i++)
             {
                 if (i == selectedIdx)
@@ -28,7 +27,6 @@ public class BasePrompter
                     Console.WriteLine($"  {list[i]}");
                     Console.ResetColor();
                 }
-
             }
 
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
