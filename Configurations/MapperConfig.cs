@@ -10,6 +10,7 @@ public class MapperConfig
         var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<OwnerProfile>();
+                cfg.AddProfile<StoreProfile>();
             }
         );
 

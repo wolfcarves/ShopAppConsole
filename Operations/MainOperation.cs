@@ -10,26 +10,26 @@ public class MainOperation
 
     public async Task OwnerOperation(string operation)
     {
-        var ownerOperation = new OwnerOperations(_context);
+        var ownerOperations = new OwnerOperations(_context);
 
         try
         {
             switch (operation)
             {
                 case OperationConstants.GetAll:
-                    await ownerOperation.GetAllOwnersAsync();
+                    await ownerOperations.GetAllOwnersAsync();
                     break;
                 case OperationConstants.GetById:
-                    await ownerOperation.GetOwnerByIdAsync(true);
+                    await ownerOperations.GetOwnerByIdAsync(true);
                     break;
                 case OperationConstants.Add:
-                    await ownerOperation.AddOwnerAsync();
+                    await ownerOperations.AddOwnerAsync();
                     break;
                 case OperationConstants.Edit:
-                    await ownerOperation.EditOwnerAsync();
+                    await ownerOperations.EditOwnerAsync();
                     break;
                 case OperationConstants.Remove:
-                    await ownerOperation.Remove();
+                    await ownerOperations.Remove();
                     break;
                 default:
                     break;
@@ -45,10 +45,40 @@ public class MainOperation
         }
     }
 
-    public void StoreOperation()
+    public async Task StoreOperation(string operation)
     {
+        var storeOperations = new StoreOperations(_context);
 
+        try
+        {
+            switch (operation)
+            {
+                case OperationConstants.GetAll:
+                    await storeOperations.GetAllStoresAsync();
+                    break;
+                case OperationConstants.GetById:
+                    await storeOperations.GetStoreByIdAsync(true);
+                    break;
+                case OperationConstants.Add:
+                    await storeOperations.AddStoreAsync();
+                    break;
+                case OperationConstants.Edit:
+                    await storeOperations.EditStoreAsync();
+                    break;
+                case OperationConstants.Remove:
+                    await storeOperations.Remove();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (KeyNotFoundException ex)
+        {
+            Console.WriteLine($"\n{ex.Message}\n");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nAn error occurred: {ex.Message}\n");
+        }
     }
-
-
 }

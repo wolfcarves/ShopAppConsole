@@ -3,7 +3,7 @@ using AutoMapper;
 using ShopApp.Configurations;
 using ShopApp.Constants;
 using ShopApp.Data;
-using ShopApp.DTO.Owner;
+using ShopApp.DTO;
 using ShopApp.Entities;
 using ShopApp.Prompts;
 
@@ -51,11 +51,7 @@ public class OwnerOperations : BaseOperation
             if (!int.TryParse(ownerId, out parsedOwnerId))
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-
-                _prompt.Print("Please enter valid numberic id");
-
-                Console.ResetColor();
+                _prompt.Print("Please enter valid numberic id", ConsoleColor.Red);
             }
 
         } while (!int.TryParse(ownerId, out parsedOwnerId));

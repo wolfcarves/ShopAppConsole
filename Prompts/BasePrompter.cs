@@ -44,7 +44,7 @@ public class BasePrompter
 
     public string Input(InputOptions options)
     {
-        string value = String.Empty;
+        string value = string.Empty;
 
         do
         {
@@ -53,7 +53,7 @@ public class BasePrompter
             else
                 Console.WriteLine(options.Title);
 
-            value = Console.ReadLine()?.Trim();
+            value = Console.ReadLine()?.Trim() ?? string.Empty;
 
         } while (string.IsNullOrEmpty(value) && options.isRequired);
 

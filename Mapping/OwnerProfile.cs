@@ -1,5 +1,5 @@
 using AutoMapper;
-using ShopApp.DTO.Owner;
+using ShopApp.DTO;
 using ShopApp.Entities;
 
 namespace ShopApp.Mapping;

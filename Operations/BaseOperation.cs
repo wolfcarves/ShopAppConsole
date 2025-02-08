@@ -1,7 +1,6 @@
 using System.Text.Json;
 using Spectre.Console;
 
-
 namespace ShopApp.Operations;
 
 public class BaseOperation

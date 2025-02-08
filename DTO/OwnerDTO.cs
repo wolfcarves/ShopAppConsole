@@ -1,4 +1,4 @@
-namespace ShopApp.DTO.Owner;
+namespace ShopApp.DTO;
 
 public class OwnerDTO
 {

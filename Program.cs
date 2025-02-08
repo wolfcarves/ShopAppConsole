@@ -37,8 +37,10 @@ class Program
         while (true)
         {
             await Run();
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
+            Console.WriteLine("\nPress enter key to continue...");
+
+            // Ignore other keys except Enter Key
+            while (Console.ReadKey(intercept: true).Key != ConsoleKey.Enter) { }
         }
     }
 
@@ -49,7 +51,8 @@ class Program
 
         var operations = new Dictionary<string, Func<string, Task>>
         {
-            {EntityConstants.Owner,  _mainOperation.OwnerOperation}
+            {EntityConstants.Owner,  _mainOperation.OwnerOperation},
+            {EntityConstants.Store,  _mainOperation.StoreOperation}
         };
 
         if (operations.TryGetValue(selectedModule, out var operation))
