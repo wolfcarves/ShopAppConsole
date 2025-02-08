@@ -1,6 +1,9 @@
 using System.Data.Entity;
+using AutoMapper;
+using ShopApp.Configurations;
 using ShopApp.Constants;
 using ShopApp.Data;
+using ShopApp.DTO.Owner;
 using ShopApp.Entities;
 using ShopApp.Prompts;
 
@@ -8,42 +11,42 @@ namespace ShopApp.Operations;
 
 public class OwnerOperations : BaseOperation
 {
-
     private readonly AppDbContext _context;
     private readonly BasePrompter _prompt;
+    private readonly IMapper _mapper;
 
     public OwnerOperations(AppDbContext context)
     {
         _context = context;
         _prompt = new BasePrompter();
+        _mapper = MapperConfig.InitializeMapper();
     }
 
     public async Task GetAllOwnersAsync()
     {
         var owners = await _context.Owners
-        .Select(o => new
-        {
-            o.Id,
-            o.FirstName,
-            o.LastName,
-            Address = !String.IsNullOrEmpty(o.OwnerDetails.Address) ? o.OwnerDetails.Address : "NULL",
-            Phone = !String.IsNullOrEmpty(o.OwnerDetails.Phone) ? o.OwnerDetails.Phone : "NULL"
-        })
-        .ToListAsync();
+            .Include(o => o.OwnerDetails)
+            .ToListAsync();
 
-        GetAllResponse(EntityConstants.Owner, owners);
+        var ownersDto = _mapper.Map<IEnumerable<OwnerDTO>>(owners);
+
+        GetAllResponse(EntityConstants.Owner, ownersDto);
     }
 
-    public async Task<Owner> GetOwnerByIdAsync()
+    public async Task<OwnerDTO> GetOwnerByIdAsync(bool clearTerminal)
     {
-        Console.Clear();
+        if (clearTerminal)
+        {
+            Console.Clear();
+            _prompt.DisplayTitle($"Get {EntityConstants.Owner}\n", ConsoleColor.Green);
+        }
 
         string ownerId;
         int parsedOwnerId;
 
         do
         {
-            ownerId = _prompt.Input(new InputOptions { Title = "Enter ownerId to fetch: ", Inline = true, isRequired = true });
+            ownerId = _prompt.Input(new InputOptions { Title = "Enter Owner Id: ", Inline = true, isRequired = true });
 
             if (!int.TryParse(ownerId, out parsedOwnerId))
             {
@@ -58,63 +61,49 @@ public class OwnerOperations : BaseOperation
         } while (!int.TryParse(ownerId, out parsedOwnerId));
 
         var owner = await _context.Owners
-            .Select(o => new
-            {
-                o.Id,
-                o.FirstName,
-                o.LastName,
-                Address = !String.IsNullOrEmpty(o.OwnerDetails.Address) ? o.OwnerDetails.Address : "NULL",
-                Phone = !String.IsNullOrEmpty(o.OwnerDetails.Phone) ? o.OwnerDetails.Phone : "NULL"
-            })
             .Where(o => o.Id == parsedOwnerId)
             .FirstOrDefaultAsync();
 
-
-        // var owner = await _context.Owners.Select(o => new Owner()
-        // {
-        //     Id = o.Id,
-        //     FirstName = o.FirstName,
-        //     LastName = o.LastName,
-
-        // }).Where(ow => ow.Id == parsedOwnerId);
-
+        var ownerDto = _mapper.Map<OwnerDTO>(owner);
 
         if (owner == null)
-            throw new KeyNotFoundException("Owner not found.");
+            throw new KeyNotFoundException("Owner not found 😞");
 
-        GetByIdResponse(EntityConstants.Owner, owner);
+        GetByIdResponse(EntityConstants.Owner, ownerDto);
 
-        return owner;
+        return ownerDto;
     }
 
 
     public async Task AddOwnerAsync()
     {
         Console.Clear();
-
-        _prompt.Print($"Add {EntityConstants.Owner}");
-        _prompt.Print("");
+        _prompt.DisplayTitle($"Add {EntityConstants.Owner}\n", ConsoleColor.Blue);
 
         string firstname = _prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
         string lastname = _prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
-        string address = _prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
+
+        string address;
         string phone = null!;
 
+        address = _prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
+        address = !string.IsNullOrEmpty(address) ? address : null!;
+
         // Will also skip the phone since this is also part of owner details 
-        // Will require phone if only addres was provided
+        // Will require phone if only address was provided
         if (!string.IsNullOrEmpty(address))
             phone = _prompt.Input(new InputOptions { Title = "Phone: ", Inline = true, isRequired = true });
 
-        var owner = new Owner()
+        var owner = _mapper.Map<Owner>(new Owner
         {
             FirstName = firstname,
             LastName = lastname,
             OwnerDetails = new OwnerDetails
             {
-                Address = address ?? "",
-                Phone = phone ?? ""
+                Address = address,
+                Phone = phone
             }
-        };
+        });
 
         _context.Owners.Add(owner);
         await _context.SaveChangesAsync();
@@ -126,25 +115,39 @@ public class OwnerOperations : BaseOperation
     {
         Console.Clear();
 
-        _prompt.Print($"Edit {EntityConstants.Owner}");
-        _prompt.Print("");
+        _prompt.DisplayTitle($"Edit {EntityConstants.Owner}\n", ConsoleColor.Yellow);
 
-        Owner owner = await GetOwnerByIdAsync();
-        _prompt.Print("");
+        OwnerDTO owner = await GetOwnerByIdAsync(false);
+        Owner ownerToEdit = await _context.Owners.FindAsync(owner.Id);
 
-
-        _prompt.Print("Update to :");
+        _prompt.Print("\nUpdate owner 👇\n", ConsoleColor.White);
 
         string firstname = _prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
         string lastname = _prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
-        string address = _prompt.Input(new InputOptions { Title = "Address: ", Inline = true, isRequired = false });
-        string phone = _prompt.Input(new InputOptions { Title = "Phone: ", Inline = true, isRequired = false });
+        string address = _prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
+        string phone = _prompt.Input(new InputOptions { Title = "Phone (Optional): ", Inline = true, isRequired = false });
 
+        ownerToEdit.FirstName = firstname;
+        ownerToEdit.LastName = lastname;
+        ownerToEdit.OwnerDetails.Address = !string.IsNullOrEmpty(address) ? address : null!;
+        ownerToEdit.OwnerDetails.Phone = !string.IsNullOrEmpty(phone) ? phone : null!;
 
+        await _context.SaveChangesAsync();
 
-
-
-
+        _prompt.Print($"\n{EntityConstants.Owner} successfully updated!", ConsoleColor.Green);
     }
 
+    public async Task Remove()
+    {
+        Console.Clear();
+        _prompt.DisplayTitle($"Delete {EntityConstants.Owner}\n", ConsoleColor.Red);
+
+        OwnerDTO owner = await GetOwnerByIdAsync(false);
+        Owner ownerToDelete = await _context.Owners.FindAsync(owner.Id);
+
+        _context.Owners.Remove(ownerToDelete);
+        await _context.SaveChangesAsync();
+
+        _prompt.Print($"\n{EntityConstants.Owner} {owner.FirstName} {owner.LastName} is successfully deleted.", ConsoleColor.Green);
+    }
 }

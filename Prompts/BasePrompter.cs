@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace ShopApp.Prompts;
 
 public class BasePrompter
@@ -20,13 +18,11 @@ public class BasePrompter
             {
                 if (i == selectedIdx)
                 {
-                    Console.WriteLine($"> {list[i]}");
-
+                    Console.WriteLine($"👉 {list[i]}");
                 }
-
                 else if (i != selectedIdx)
                 {
-                    Console.WriteLine($"  {list[i]}");
+                    Console.WriteLine($"   {list[i]}");
                     Console.ResetColor();
                 }
             }
@@ -36,18 +32,13 @@ public class BasePrompter
             var lastIdx = list.Length - 1;
 
             if (keyInfo.Key == ConsoleKey.UpArrow)
-            {
                 selectedIdx = selectedIdx == 0 ? lastIdx : selectedIdx - 1;
-            }
 
             else if (keyInfo.Key == ConsoleKey.DownArrow)
-            {
                 selectedIdx = selectedIdx == lastIdx ? 0 : selectedIdx + 1;
-            }
+
             else if (keyInfo.Key == ConsoleKey.Enter || keyInfo.Key == ConsoleKey.Spacebar)
-            {
                 return selectedIdx;
-            }
         }
     }
 
@@ -69,12 +60,24 @@ public class BasePrompter
         return value;
     }
 
-    public void Print(string data, bool? inline = false)
+    public void Print(string data, ConsoleColor? color = ConsoleColor.White, bool? inline = false)
     {
+        Console.ForegroundColor = color ?? ConsoleColor.White;
+
         if (inline ?? false) // WriteLine by default
             Console.Write(data + " ");
         else
             Console.WriteLine(data);
+
+        Console.ResetColor();
+
+    }
+
+    public void DisplayTitle(string title, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine($"\n{title}\n");
+        Console.ResetColor();
     }
 }
 

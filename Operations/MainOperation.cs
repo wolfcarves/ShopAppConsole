@@ -20,13 +20,16 @@ public class MainOperation
                     await ownerOperation.GetAllOwnersAsync();
                     break;
                 case OperationConstants.GetById:
-                    await ownerOperation.GetOwnerByIdAsync();
+                    await ownerOperation.GetOwnerByIdAsync(true);
                     break;
                 case OperationConstants.Add:
                     await ownerOperation.AddOwnerAsync();
                     break;
                 case OperationConstants.Edit:
                     await ownerOperation.EditOwnerAsync();
+                    break;
+                case OperationConstants.Remove:
+                    await ownerOperation.Remove();
                     break;
                 default:
                     break;
@@ -46,4 +49,6 @@ public class MainOperation
     {
 
     }
+
+
 }
