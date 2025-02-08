@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace ShopApp.Prompts;
 
 public class BasePrompter
@@ -42,10 +44,44 @@ public class BasePrompter
             {
                 selectedIdx = selectedIdx == lastIdx ? 0 : selectedIdx + 1;
             }
-            else if (keyInfo.Key == ConsoleKey.Enter)
+            else if (keyInfo.Key == ConsoleKey.Enter || keyInfo.Key == ConsoleKey.Spacebar)
             {
                 return selectedIdx;
             }
         }
     }
+
+    public string Input(InputOptions options)
+    {
+        string value = String.Empty;
+
+        do
+        {
+            if (options.Inline)
+                Console.Write(options.Title + " ");
+            else
+                Console.WriteLine(options.Title);
+
+            value = Console.ReadLine()?.Trim();
+
+        } while (string.IsNullOrEmpty(value) && options.isRequired);
+
+        return value;
+    }
+
+    public void Print(string data, bool? inline = false)
+    {
+        if (inline ?? false) // WriteLine by default
+            Console.Write(data + " ");
+        else
+            Console.WriteLine(data);
+    }
+}
+
+public class InputOptions()
+{
+    public string Title { get; set; }
+    public bool Inline { get; set; } = false;
+    public bool isRequired { get; set; } = true;
+
 }

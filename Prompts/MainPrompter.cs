@@ -1,11 +1,10 @@
 using ShopApp.Constants;
 
-
 namespace ShopApp.Prompts;
 
-public class ModulePrompter : BasePrompter
+public class MainPrompter : BasePrompter
 {
-    public ModulePrompter() { }
+    public MainPrompter() { }
 
     public string SelectModulePrompt()
     {
