@@ -107,7 +107,7 @@ public class ProductOperations : BaseOperation
         _prompt.Print($"\n{EntityConstants.Product} successfully updated!", ConsoleColor.Green);
     }
 
-    public async Task Remove()
+    public async Task RemoveProductAsync()
     {
         Console.Clear();
         _prompt.DisplayTitle($"Delete {EntityConstants.Product}\n", ConsoleColor.Red);

@@ -120,7 +120,7 @@ public class OwnerOperations : BaseOperation
         _prompt.Print($"\n{EntityConstants.Owner} successfully updated!", ConsoleColor.Green);
     }
 
-    public async Task Remove()
+    public async Task RemoveOwnerAsync()
     {
         Console.Clear();
         _prompt.DisplayTitle($"Delete {EntityConstants.Owner}\n", ConsoleColor.Red);

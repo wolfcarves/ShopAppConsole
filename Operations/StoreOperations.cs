@@ -101,7 +101,7 @@ public class StoreOperations : BaseOperation
         _prompt.Print($"\n{EntityConstants.Store} successfully updated!", ConsoleColor.Green);
     }
 
-    public async Task Remove()
+    public async Task RemoveStoreAsync()
     {
         Console.Clear();
         _prompt.DisplayTitle($"Delete {EntityConstants.Store}\n", ConsoleColor.Red);
