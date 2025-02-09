@@ -38,7 +38,7 @@ public class OwnerOperations : BaseOperation
         if (clearTerminal)
         {
             Console.Clear();
-            _prompt.DisplayTitle($"Get {EntityConstants.Owner}\n", ConsoleColor.Green);
+            _prompt.Print($"Get {EntityConstants.Owner}\n", ConsoleColor.Green);
         }
 
         int ownerId = (int)_prompt.Input(new InputOptions { Title = "Enter Owner Id: ", Inline = true, isRequired = true, Type = "Number" });
@@ -61,7 +61,7 @@ public class OwnerOperations : BaseOperation
     public async Task AddOwnerAsync()
     {
         Console.Clear();
-        _prompt.DisplayTitle($"Add {EntityConstants.Owner}\n", ConsoleColor.Blue);
+        _prompt.Print($"Add {EntityConstants.Owner}\n", ConsoleColor.Blue);
 
         string firstname = (string)_prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
         string lastname = (string)_prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
@@ -98,7 +98,7 @@ public class OwnerOperations : BaseOperation
     {
         Console.Clear();
 
-        _prompt.DisplayTitle($"Edit {EntityConstants.Owner}\n", ConsoleColor.Yellow);
+        _prompt.Print($"Edit {EntityConstants.Owner}\n", ConsoleColor.Yellow);
 
         OwnerDTO owner = await GetOwnerByIdAsync(false);
         Owner ownerToEdit = await _context.Owners.FindAsync(owner.Id);
@@ -123,7 +123,7 @@ public class OwnerOperations : BaseOperation
     public async Task RemoveOwnerAsync()
     {
         Console.Clear();
-        _prompt.DisplayTitle($"Delete {EntityConstants.Owner}\n", ConsoleColor.Red);
+        _prompt.Print($"Delete {EntityConstants.Owner}\n", ConsoleColor.Red);
 
         OwnerDTO owner = await GetOwnerByIdAsync(false);
         Owner ownerToDelete = await _context.Owners.FindAsync(owner.Id);

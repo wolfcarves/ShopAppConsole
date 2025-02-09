@@ -12,6 +12,7 @@ public class MapperConfig
                 cfg.AddProfile<OwnerProfile>();
                 cfg.AddProfile<StoreProfile>();
                 cfg.AddProfile<ProductProfile>();
+                cfg.AddProfile<CategoryProfile>();
             }
         );
 

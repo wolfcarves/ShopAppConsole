@@ -83,13 +83,6 @@ public class BasePrompter
         Console.ResetColor();
 
     }
-
-    public void DisplayTitle(string title, ConsoleColor color)
-    {
-        Console.ForegroundColor = color;
-        Print($"\n{title}\n");
-        Console.ResetColor();
-    }
 }
 
 public class InputOptions()

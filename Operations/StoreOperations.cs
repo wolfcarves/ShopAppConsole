@@ -38,7 +38,7 @@ public class StoreOperations : BaseOperation
         if (clearTerminal)
         {
             Console.Clear();
-            _prompt.DisplayTitle($"Get {EntityConstants.Store}\n", ConsoleColor.Green);
+            _prompt.Print($"Get {EntityConstants.Store}\n", ConsoleColor.Green);
         }
 
         int storeId = (int)_prompt.Input(new InputOptions { Title = "Enter Store Id: ", Inline = true, isRequired = true, Type = "Number" });
@@ -60,7 +60,7 @@ public class StoreOperations : BaseOperation
     public async Task AddStoreAsync()
     {
         Console.Clear();
-        _prompt.DisplayTitle($"Add {EntityConstants.Store}\n", ConsoleColor.Blue);
+        _prompt.Print($"Add {EntityConstants.Store}\n", ConsoleColor.Blue);
 
         int ownerId = (int)_prompt.Input(new InputOptions { Title = "OwnerId: ", Inline = true, isRequired = true, Type = "Number" });
 
@@ -86,7 +86,7 @@ public class StoreOperations : BaseOperation
     {
         Console.Clear();
 
-        _prompt.DisplayTitle($"Edit {EntityConstants.Store}\n", ConsoleColor.Yellow);
+        _prompt.Print($"Edit {EntityConstants.Store}\n", ConsoleColor.Yellow);
 
         StoreDTO store = await GetStoreByIdAsync(false);
         Store storeToEdit = await _context.Stores.FindAsync(store.Id);
@@ -105,7 +105,7 @@ public class StoreOperations : BaseOperation
     public async Task RemoveStoreAsync()
     {
         Console.Clear();
-        _prompt.DisplayTitle($"Delete {EntityConstants.Store}\n", ConsoleColor.Red);
+        _prompt.Print($"Delete {EntityConstants.Store}\n", ConsoleColor.Red);
 
         StoreDTO store = await GetStoreByIdAsync(false);
         Store storeToDelete = await _context.Stores.FindAsync(store.Id);

@@ -38,7 +38,7 @@ public class ProductOperations : BaseOperation
         if (clearTerminal)
         {
             Console.Clear();
-            _prompt.DisplayTitle($"Get {EntityConstants.Product}\n", ConsoleColor.Green);
+            _prompt.Print($"Get {EntityConstants.Product}\n", ConsoleColor.Green);
         }
 
         int productId = (int)_prompt.Input(new InputOptions { Title = "Enter Product Id: ", Inline = true, isRequired = true, Type = "Number" });
@@ -60,7 +60,7 @@ public class ProductOperations : BaseOperation
     public async Task AddProductAsync()
     {
         Console.Clear();
-        _prompt.DisplayTitle($"Add {EntityConstants.Product}\n", ConsoleColor.Blue);
+        _prompt.Print($"Add {EntityConstants.Product}\n", ConsoleColor.Blue);
 
         int storeId = (int)_prompt.Input(new InputOptions { Title = "StoreId: ", Inline = true, isRequired = true, Type = "Number" });
 
@@ -92,7 +92,7 @@ public class ProductOperations : BaseOperation
     {
         Console.Clear();
 
-        _prompt.DisplayTitle($"Edit {EntityConstants.Product}\n", ConsoleColor.Yellow);
+        _prompt.Print($"Edit {EntityConstants.Product}\n", ConsoleColor.Yellow);
 
         ProductDTO product = await GetProductByIdAsync(false);
         Product productToEdit = await _context.Products.FindAsync(product.Id);
@@ -115,7 +115,7 @@ public class ProductOperations : BaseOperation
     public async Task RemoveProductAsync()
     {
         Console.Clear();
-        _prompt.DisplayTitle($"Delete {EntityConstants.Product}\n", ConsoleColor.Red);
+        _prompt.Print($"Delete {EntityConstants.Product}\n", ConsoleColor.Red);
 
         ProductDTO product = await GetProductByIdAsync(false);
         Product productToDelete = await _context.Products.FindAsync(product.Id);

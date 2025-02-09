@@ -118,4 +118,41 @@ public class MainOperation
             Console.WriteLine($"\nAn error occurred: {ex.Message}\n");
         }
     }
+
+    public async Task CategoryOperation(string operation)
+    {
+        var productOperations = new CategoryOperations(_context);
+
+        try
+        {
+            switch (operation)
+            {
+                case OperationConstants.GetAll:
+                    await productOperations.GetAllCategoryAsync();
+                    break;
+                case OperationConstants.GetById:
+                    await productOperations.GetCategoryByIdAsync(true);
+                    break;
+                case OperationConstants.Add:
+                    await productOperations.AddCategoryAsync();
+                    break;
+                case OperationConstants.Edit:
+                    await productOperations.EditCategoryAsync();
+                    break;
+                case OperationConstants.Remove:
+                    await productOperations.RemoveCategoryAsync();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (KeyNotFoundException ex)
+        {
+            Console.WriteLine($"\n{ex.Message}\n");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nAn error occurred: {ex.Message}\n");
+        }
+    }
 }

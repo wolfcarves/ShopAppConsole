@@ -5,9 +5,7 @@ namespace ShopApp.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext() : base()
-    {
-    }
+    public AppDbContext() : base() { }
 
     public DbSet<Owner> Owners { get; set; }
     public DbSet<OwnerDetails> OwnerDetails { get; set; }

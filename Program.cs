@@ -1,7 +1,5 @@
-﻿
-using ShopApp.Constants;
+﻿using ShopApp.Constants;
 using ShopApp.Data;
-using ShopApp.Entities;
 using ShopApp.Operations;
 using ShopApp.Prompts;
 
@@ -55,7 +53,8 @@ class Program
         {
             {EntityConstants.Owner,  _mainOperation.OwnerOperation},
             {EntityConstants.Store,  _mainOperation.StoreOperation},
-            {EntityConstants.Product,  _mainOperation.ProductOperation}
+            {EntityConstants.Product,  _mainOperation.ProductOperation},
+            {EntityConstants.Category,  _mainOperation.CategoryOperation}
         };
 
         if (operations.TryGetValue(selectedModule, out var operation))
