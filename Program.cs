@@ -12,7 +12,8 @@ class Program
     {
         using (var context = new AppDbContext())
         {
-            var owners = context.Owners.ToList();
+            // var seed = new SeedOperation(context);
+            // await seed.SeedOne();
 
             var MainPrompter = new MainPrompter();
             var mainOperation = new MainOperation(context);
@@ -52,7 +53,8 @@ class Program
         var operations = new Dictionary<string, Func<string, Task>>
         {
             {EntityConstants.Owner,  _mainOperation.OwnerOperation},
-            {EntityConstants.Store,  _mainOperation.StoreOperation}
+            {EntityConstants.Store,  _mainOperation.StoreOperation},
+            {EntityConstants.Product,  _mainOperation.ProductOperation}
         };
 
         if (operations.TryGetValue(selectedModule, out var operation))

@@ -42,9 +42,10 @@ public class BasePrompter
         }
     }
 
-    public string Input(InputOptions options)
+    public object Input(InputOptions options)
     {
         string value = string.Empty;
+        int intValue = 0;
 
         do
         {
@@ -55,9 +56,20 @@ public class BasePrompter
 
             value = Console.ReadLine()?.Trim() ?? string.Empty;
 
-        } while (string.IsNullOrEmpty(value) && options.isRequired);
+            if (options.Type == "Number" && !int.TryParse(value, out intValue))
+            {
+                value = string.Empty;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nPlease enter valid numberic id\n");
+                Console.ResetColor();
+            }
 
-        return value;
+        } while (string.IsNullOrEmpty(value)
+                && options.isRequired
+                && (options.Type == "Number" ? !int.TryParse(value, out intValue) : false)
+                );
+
+        return options.Type == "Text" ? value : Convert.ToInt32(intValue);
     }
 
     public void Print(string data, ConsoleColor? color = ConsoleColor.White, bool? inline = false)
@@ -83,8 +95,8 @@ public class BasePrompter
 
 public class InputOptions()
 {
-    public string Title { get; set; }
+    public string Title { get; set; } = String.Empty;
     public bool Inline { get; set; } = false;
     public bool isRequired { get; set; } = true;
-
+    public string? Type { get; set; } = "Text";
 }

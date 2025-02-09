@@ -41,29 +41,16 @@ public class OwnerOperations : BaseOperation
             _prompt.DisplayTitle($"Get {EntityConstants.Owner}\n", ConsoleColor.Green);
         }
 
-        string ownerId;
-        int parsedOwnerId;
-
-        do
-        {
-            ownerId = _prompt.Input(new InputOptions { Title = "Enter Owner Id: ", Inline = true, isRequired = true });
-
-            if (!int.TryParse(ownerId, out parsedOwnerId))
-            {
-                Console.Clear();
-                _prompt.Print("Please enter valid numberic id", ConsoleColor.Red);
-            }
-
-        } while (!int.TryParse(ownerId, out parsedOwnerId));
+        int ownerId = (int)_prompt.Input(new InputOptions { Title = "Enter Owner Id: ", Inline = true, isRequired = true, Type = "Number" });
 
         var owner = await _context.Owners
-            .Where(o => o.Id == parsedOwnerId)
+            .Where(o => o.Id == ownerId)
             .FirstOrDefaultAsync();
 
         var ownerDto = _mapper.Map<OwnerDTO>(owner);
 
         if (owner == null)
-            throw new KeyNotFoundException("Owner not found 😞");
+            throw new KeyNotFoundException("\nOwner not found 😞");
 
         GetByIdResponse(EntityConstants.Owner, ownerDto);
 
@@ -76,19 +63,19 @@ public class OwnerOperations : BaseOperation
         Console.Clear();
         _prompt.DisplayTitle($"Add {EntityConstants.Owner}\n", ConsoleColor.Blue);
 
-        string firstname = _prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
-        string lastname = _prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
+        string firstname = (string)_prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
+        string lastname = (string)_prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
 
         string address;
         string phone = null!;
 
-        address = _prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
+        address = (string)_prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
         address = !string.IsNullOrEmpty(address) ? address : null!;
 
         // Will also skip the phone since this is also part of owner details 
         // Will require phone if only address was provided
         if (!string.IsNullOrEmpty(address))
-            phone = _prompt.Input(new InputOptions { Title = "Phone: ", Inline = true, isRequired = true });
+            phone = (string)_prompt.Input(new InputOptions { Title = "Phone: ", Inline = true, isRequired = true });
 
         var owner = _mapper.Map<Owner>(new Owner
         {
@@ -118,10 +105,10 @@ public class OwnerOperations : BaseOperation
 
         _prompt.Print("\nUpdate owner 👇\n", ConsoleColor.White);
 
-        string firstname = _prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
-        string lastname = _prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
-        string address = _prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
-        string phone = _prompt.Input(new InputOptions { Title = "Phone (Optional): ", Inline = true, isRequired = false });
+        string firstname = (string)_prompt.Input(new InputOptions { Title = "FirstName: ", Inline = true, isRequired = true });
+        string lastname = (string)_prompt.Input(new InputOptions { Title = "Lastname: ", Inline = true, isRequired = true });
+        string address = (string)_prompt.Input(new InputOptions { Title = "Address (Optional): ", Inline = true, isRequired = false });
+        string phone = (string)_prompt.Input(new InputOptions { Title = "Phone (Optional): ", Inline = true, isRequired = false });
 
         ownerToEdit.FirstName = firstname;
         ownerToEdit.LastName = lastname;

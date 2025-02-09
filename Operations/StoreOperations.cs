@@ -4,6 +4,7 @@ using ShopApp.Configurations;
 using ShopApp.Constants;
 using ShopApp.Data;
 using ShopApp.DTO;
+using ShopApp.Entities;
 using ShopApp.Prompts;
 
 namespace ShopApp.Operations;
@@ -39,23 +40,10 @@ public class StoreOperations : BaseOperation
             _prompt.DisplayTitle($"Get {EntityConstants.Store}\n", ConsoleColor.Green);
         }
 
-        string storeId;
-        int parsedStoreId;
-
-        do
-        {
-            storeId = _prompt.Input(new InputOptions { Title = "Enter Store Id: ", Inline = true, isRequired = true });
-
-            if (!int.TryParse(storeId, out parsedStoreId))
-            {
-                Console.Clear();
-                _prompt.Print("Please enter valid numberic id", ConsoleColor.Red);
-            }
-
-        } while (!int.TryParse(storeId, out parsedStoreId));
+        int storeId = (int)_prompt.Input(new InputOptions { Title = "Enter Store Id: ", Inline = true, isRequired = true, Type = "Number" });
 
         var store = await _context.Stores
-            .Where(o => o.Id == parsedStoreId)
+            .Where(o => o.Id == storeId)
             .FirstOrDefaultAsync();
 
         var storeDto = _mapper.Map<StoreDTO>(store);
@@ -73,16 +61,13 @@ public class StoreOperations : BaseOperation
         Console.Clear();
         _prompt.DisplayTitle($"Add {EntityConstants.Store}\n", ConsoleColor.Blue);
 
-        string storeName = _prompt.Input(new InputOptions { Title = "Name: ", Inline = true, isRequired = true });
-        string ownerId = string.Empty;
-        int parsedOwnerId;
+        int ownerId = (int)_prompt.Input(new InputOptions { Title = "OwnerId: ", Inline = true, isRequired = true, Type = "Number" });
 
-        do ownerId = _prompt.Input(new InputOptions { Title = "OwnerId: ", Inline = true, isRequired = true });
-        while (!int.TryParse(ownerId, out parsedOwnerId));
-
-        var owner = await _context.Owners.FirstOrDefaultAsync(o => o.Id == parsedOwnerId);
+        var owner = await _context.Owners.FirstOrDefaultAsync(o => o.Id == ownerId);
 
         if (owner == null) throw new KeyNotFoundException("Owner not found 😞");
+
+        string storeName = (string)_prompt.Input(new InputOptions { Title = "Name: ", Inline = true, isRequired = true });
 
         var store = _mapper.Map<Store>(new Store
         {
@@ -107,7 +92,7 @@ public class StoreOperations : BaseOperation
 
         _prompt.Print("\nUpdate store 👇\n", ConsoleColor.White);
 
-        string storeName = _prompt.Input(new InputOptions { Title = "Store Name: ", Inline = true, isRequired = true });
+        string storeName = (string)_prompt.Input(new InputOptions { Title = "Store Name: ", Inline = true, isRequired = true });
 
         storeToEdit.Name = storeName;
 

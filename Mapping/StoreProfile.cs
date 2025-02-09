@@ -1,4 +1,5 @@
 using AutoMapper;
+using ShopApp.Entities;
 using ShopApp.DTO;
 
 namespace ShopApp.Mapping;

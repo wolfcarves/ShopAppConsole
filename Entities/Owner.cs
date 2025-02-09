@@ -1,11 +1,11 @@
 namespace ShopApp.Entities;
 
-public class Owner
+public class Owner : BaseEntity
 {
     public int Id { get; set; }
-    public string FirstName { get; set; } = String.Empty;
-    public string LastName { get; set; } = String.Empty;
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
 
     public virtual OwnerDetails OwnerDetails { get; set; } = null!;
-    public ICollection<Store> Store { get; set; } = null!;
+    public virtual ICollection<Store> Store { get; set; } = new List<Store>();
 }

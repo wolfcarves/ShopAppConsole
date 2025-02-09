@@ -29,7 +29,7 @@ public class MainOperation
                     await ownerOperations.EditOwnerAsync();
                     break;
                 case OperationConstants.Remove:
-                    await ownerOperations.Remove();
+                    await ownerOperations.RemoveOwnerAsync();
                     break;
                 default:
                     break;
@@ -66,7 +66,44 @@ public class MainOperation
                     await storeOperations.EditStoreAsync();
                     break;
                 case OperationConstants.Remove:
-                    await storeOperations.Remove();
+                    await storeOperations.RemoveStoreAsync();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (KeyNotFoundException ex)
+        {
+            Console.WriteLine($"\n{ex.Message}\n");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\nAn error occurred: {ex.Message}\n");
+        }
+    }
+
+    public async Task ProductOperation(string operation)
+    {
+        var productOperations = new ProductOperations(_context);
+
+        try
+        {
+            switch (operation)
+            {
+                case OperationConstants.GetAll:
+                    await productOperations.GetAllProductsAsync();
+                    break;
+                case OperationConstants.GetById:
+                    await productOperations.GetProductByIdAsync(true);
+                    break;
+                case OperationConstants.Add:
+                    await productOperations.AddProductAsync();
+                    break;
+                case OperationConstants.Edit:
+                    await productOperations.EditProductAsync();
+                    break;
+                case OperationConstants.Remove:
+                    await productOperations.RemoveProductAsync();
                     break;
                 default:
                     break;
