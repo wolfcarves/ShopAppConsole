@@ -120,6 +120,7 @@ public class ProductOperations : BaseOperation
 
         ProductDTO product = await GetProductByIdAsync(false);
         Product productToEdit = await _context.Products.FindAsync(product.Id);
+        ProductCategory productCategoryToEdit = await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.ProductId == product.Id);
 
         _prompt.Print("\nUpdate product 👇\n", ConsoleColor.White);
 
@@ -127,9 +128,36 @@ public class ProductOperations : BaseOperation
         int price = (int)_prompt.Input(new InputOptions { Title = "Price: ", Inline = true, isRequired = true, Type = "Number" });
         int quantity = (int)_prompt.Input(new InputOptions { Title = "Quantity: ", Inline = true, isRequired = true, Type = "Number" });
 
+        var categories = await _context.Category.ToListAsync();
+
+        string[] categoryNames = new[] { "None" }
+                                .Concat(categories
+                                .Select(c => c.Name))
+                                .ToArray();
+
+        int pickedCategoryIdx = _prompt.PickSelection("Pick a category", categoryNames);
+        var pickedCategoryName = categoryNames[pickedCategoryIdx];
+        int? categoryId = categories.FirstOrDefault(c => c.Name == pickedCategoryName)?.Id;
+
         productToEdit.Name = productName;
         productToEdit.Price = price;
         productToEdit.Quantity = quantity;
+
+        // If user will update category from null
+        if (productCategoryToEdit == null && pickedCategoryIdx > 0 && categoryId.HasValue)
+        {
+            var productCategory = new ProductCategory()
+            {
+                CategoryId = (int)categoryId,
+                ProductId = product.Id
+            };
+
+            _context.ProductCategories.Add(productCategory);
+        }
+
+        // Delete the junction table if "None" is selected
+        if (productCategoryToEdit != null && pickedCategoryIdx == 0)
+            _context.ProductCategories.Remove(productCategoryToEdit);
 
         await _context.SaveChangesAsync();
 
