@@ -26,6 +26,7 @@ public class ProductOperations : BaseOperation
     {
         var products = await _context.Products
             .Include(p => p.Store)
+            .Include(p => p.ProductCategories.Select(pc => pc.Category))
             .ToListAsync();
 
         var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
@@ -74,6 +75,17 @@ public class ProductOperations : BaseOperation
 
         int quantity = (int)_prompt.Input(new InputOptions { Title = "Quantity: ", Inline = true, isRequired = true, Type = "Number" });
 
+        var categories = await _context.Category.ToListAsync();
+
+        string[] categoryNames = new[] { "None" }
+                                .Concat(categories
+                                .Select(c => c.Name))
+                                .ToArray();
+
+        int pickedCategoryIdx = _prompt.PickSelection("Pick a category", categoryNames);
+        var pickedCategoryName = categoryNames[pickedCategoryIdx];
+        int? categoryId = categories.FirstOrDefault(c => c.Name == pickedCategoryName)?.Id;
+
         var product = _mapper.Map<Product>(new Product
         {
             Name = productName,
@@ -84,6 +96,18 @@ public class ProductOperations : BaseOperation
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
+
+        if (categoryId.HasValue)
+        {
+            var productCategory = new ProductCategory
+            {
+                CategoryId = (int)categoryId,
+                ProductId = product.Id
+            };
+
+            _context.ProductCategories.Add(productCategory);
+            await _context.SaveChangesAsync();
+        }
 
         _prompt.Print($"\n{productName} Product is created.", ConsoleColor.Green);
     }
