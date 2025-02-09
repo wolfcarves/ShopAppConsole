@@ -27,6 +27,7 @@ public class StoreOperations : BaseOperation
         var stores = await _context.Stores
             .Include(o => o.Owner)
             .ToListAsync();
+
         var storesDto = _mapper.Map<IEnumerable<StoreDTO>>(stores);
 
         GetAllResponse(EntityConstants.Store, storesDto);

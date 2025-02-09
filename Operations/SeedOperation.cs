@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using ShopApp.Data;
 using ShopApp.Entities;
 
@@ -11,8 +12,12 @@ class SeedOperation
     _context = context;
   }
 
-  public async Task SeedOne()
+  public async Task SeedOnce()
   {
+    var existingOwners = await _context.Owners.ToListAsync();
+
+    if (existingOwners.Count > 0) return;
+
     var owner = new Owner()
     {
       FirstName = "Rodel",
@@ -34,7 +39,7 @@ class SeedOperation
 
     var product = new Product()
     {
-      Name = "Sari Sari Store",
+      Name = "RTX 4090ti",
       StoreId = store.Id,
       Quantity = 1,
       Price = 999999999
@@ -42,8 +47,5 @@ class SeedOperation
 
     _context.Products.Add(product);
     await _context.SaveChangesAsync();
-
-
-
   }
 }

@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<OwnerDetails> OwnerDetails { get; set; }
     public DbSet<Store> Stores { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Category> Category { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {
@@ -29,6 +31,20 @@ public class AppDbContext : DbContext
                     .WithMany(p => p.Product)
                     .HasForeignKey(p => p.StoreId)
                     .WillCascadeOnDelete(true);
+
+        // Product <-> Category
+        modelBuilder.Entity<ProductCategory>()
+                    .HasKey(pc => new { pc.ProductId, pc.CategoryId });
+
+        modelBuilder.Entity<ProductCategory>()
+                    .HasRequired(p => p.Product)
+                    .WithMany(p => p.ProductCategories)
+                    .HasForeignKey(p => p.ProductId);
+
+        modelBuilder.Entity<ProductCategory>()
+                    .HasRequired(c => c.Category)
+                    .WithMany(c => c.ProductCategories)
+                    .HasForeignKey(c => c.CategoryId);
     }
 
     public override int SaveChanges()

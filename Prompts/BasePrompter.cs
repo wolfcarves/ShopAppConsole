@@ -11,18 +11,18 @@ public class BasePrompter
         while (true)
         {
             Console.Clear();
-            Console.WriteLine(title);
-            Console.WriteLine("");
+            Print(title);
+            Print("");
 
             for (int i = 0; i < list.Length; i++)
             {
                 if (i == selectedIdx)
                 {
-                    Console.WriteLine($"👉 {list[i]}");
+                    Print($"👉 {list[i]}");
                 }
                 else if (i != selectedIdx)
                 {
-                    Console.WriteLine($"   {list[i]}");
+                    Print($"   {list[i]}");
                     Console.ResetColor();
                 }
             }
@@ -52,15 +52,14 @@ public class BasePrompter
             if (options.Inline)
                 Console.Write(options.Title + " ");
             else
-                Console.WriteLine(options.Title);
+                Print(options.Title);
 
             value = Console.ReadLine()?.Trim() ?? string.Empty;
 
             if (options.Type == "Number" && !int.TryParse(value, out intValue))
             {
                 value = string.Empty;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nPlease enter valid numberic id\n");
+                Print("\nPlease enter valid numberic id\n", ConsoleColor.Red);
                 Console.ResetColor();
             }
 
@@ -88,7 +87,7 @@ public class BasePrompter
     public void DisplayTitle(string title, ConsoleColor color)
     {
         Console.ForegroundColor = color;
-        Console.WriteLine($"\n{title}\n");
+        Print($"\n{title}\n");
         Console.ResetColor();
     }
 }

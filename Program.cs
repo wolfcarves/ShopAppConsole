@@ -1,6 +1,7 @@
 ﻿
 using ShopApp.Constants;
 using ShopApp.Data;
+using ShopApp.Entities;
 using ShopApp.Operations;
 using ShopApp.Prompts;
 
@@ -12,8 +13,8 @@ class Program
     {
         using (var context = new AppDbContext())
         {
-            // var seed = new SeedOperation(context);
-            // await seed.SeedOne();
+            var seed = new SeedOperation(context);
+            await seed.SeedOnce();
 
             var MainPrompter = new MainPrompter();
             var mainOperation = new MainOperation(context);

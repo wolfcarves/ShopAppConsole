@@ -6,6 +6,6 @@ public class Owner : BaseEntity
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
 
-    public virtual OwnerDetails OwnerDetails { get; set; } = null!;
+    public OwnerDetails OwnerDetails { get; set; } = null!;
     public virtual ICollection<Store> Store { get; set; } = new List<Store>();
 }

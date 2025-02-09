@@ -9,6 +9,6 @@ public class ProductProfile : Profile
     public ProductProfile()
     {
         CreateMap<Product, ProductDTO>()
-            .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.Store));
+            .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.Store.Id));
     }
 }

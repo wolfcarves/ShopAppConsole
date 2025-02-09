@@ -8,5 +8,6 @@ public class OwnerDetails
     public int Id { get; set; }
     public string Address { get; set; } = null!;
     public string Phone { get; set; } = null!;
-    public virtual Owner Owner { get; set; } = null!;
+
+    public Owner Owner { get; set; } = null!;
 }
