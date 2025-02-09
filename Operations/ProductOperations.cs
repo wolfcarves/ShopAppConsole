@@ -25,6 +25,7 @@ public class ProductOperations : BaseOperation
     public async Task GetAllProductsAsync()
     {
         var products = await _context.Products
+            .Include(p => p.Store)
             .ToListAsync();
 
         var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
@@ -99,8 +100,12 @@ public class ProductOperations : BaseOperation
         _prompt.Print("\nUpdate product 👇\n", ConsoleColor.White);
 
         string productName = (string)_prompt.Input(new InputOptions { Title = "Product Name: ", Inline = true, isRequired = true });
+        int price = (int)_prompt.Input(new InputOptions { Title = "Price: ", Inline = true, isRequired = true, Type = "Number" });
+        int quantity = (int)_prompt.Input(new InputOptions { Title = "Quantity: ", Inline = true, isRequired = true, Type = "Number" });
 
         productToEdit.Name = productName;
+        productToEdit.Price = price;
+        productToEdit.Quantity = quantity;
 
         await _context.SaveChangesAsync();
 
