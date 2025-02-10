@@ -5,7 +5,10 @@ namespace ShopApp.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext() : base() { }
+    public AppDbContext() : base("shopapp_db")
+    {
+        Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppDbContext, ShopApp.Migrations.Configuration>());
+    }
 
     public DbSet<Owner> Owners { get; set; }
     public DbSet<OwnerDetails> OwnerDetails { get; set; }
@@ -43,6 +46,8 @@ public class AppDbContext : DbContext
                     .HasRequired(c => c.Category)
                     .WithMany(c => c.ProductCategories)
                     .HasForeignKey(c => c.CategoryId);
+
+        base.OnModelCreating(modelBuilder);
     }
 
     public override int SaveChanges()

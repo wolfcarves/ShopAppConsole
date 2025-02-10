@@ -11,9 +11,6 @@ class Program
     {
         using (var context = new AppDbContext())
         {
-            var seed = new SeedOperation(context);
-            await seed.SeedOnce();
-
             var MainPrompter = new MainPrompter();
             var mainOperation = new MainOperation(context);
 
